@@ -1,0 +1,22 @@
+language: generic
+services:
+  - docker
+
+before_install:
+  - docker build -t hautdse05831/react-test -f ./client/Dockerfile.dev ./client
+
+script: 
+  - docker run -e CI=true hautdse05831/react-test npm test
+
+after_success: 
+  - docker build -t hautdse05831/multi-client ./client
+  - docker build -t hautdse05831/multi-nginx ./nginx
+  - docker build -t hautdse05831/multi-server ./server
+  - docker build -t hautdse05831/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  #Take those images and push them to docker hub
+  - docker push hautdse05831/multi-client
+  - docker push hautdse05831/multi-nginx
+  - docker push hautdse05831/multi-server
+  - docker push hautdse05831/multi-worker
