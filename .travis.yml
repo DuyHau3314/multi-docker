@@ -20,3 +20,4 @@ after_success:
   - docker push hautdse05831/multi-nginx
   - docker push hautdse05831/multi-server
   - docker push hautdse05831/multi-worker
+
